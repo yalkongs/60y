@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎉 쎌 친구들 환갑 카운트다운 🎉</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 50%, #48dbfb 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-size: 200% 200%;
+            animation: gradientShift 5s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 550px;
+            width: 100%;
+            animation: bounce 0.5s ease-in;
+        }
+
+        @keyframes bounce {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        h1 {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+            animation: pulse 2s infinite;
+            line-height: 1.3;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .name-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .name-btn {
+            padding: 12px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border: 3px solid transparent;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .name-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+        }
+
+        .name-btn.selected {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            border-color: #ff6b6b;
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .name-btn.other {
+            background: linear-gradient(135deg, #a29bfe 0%, #74b9ff 100%);
+        }
+
+        .name-btn.other:hover {
+            background: linear-gradient(135deg, #74b9ff 0%, #a29bfe 100%);
+        }
+
+        .name-btn.other.selected {
+            background: linear-gradient(45deg, #6c5ce7, #74b9ff);
+        }
+
+        .other-name-input {
+            width: 100%;
+            padding: 14px;
+            border: 3px solid #74b9ff;
+            border-radius: 15px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+            display: none;
+            margin-top: 10px;
+        }
+
+        .other-name-input.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .other-name-input:focus {
+            border-color: #6c5ce7;
+            outline: none;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+        }
+
+        .date-selectors {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 10px;
+        }
+
+        select {
+            width: 100%;
+            padding: 14px;
+            border: 3px solid #f0f0f0;
+            border-radius: 15px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 20px;
+            padding-right: 40px;
+        }
+
+        select:focus {
+            border-color: #ff6b6b;
+            outline: none;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+            transform: scale(1.02);
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            line-height: 1.3;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-radius: 20px;
+            display: none;
+            animation: popIn 0.5s ease;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .welcome-message {
+            text-align: center;
+            font-size: 1.4em;
+            color: #ff6b6b;
+            font-weight: bold;
+            margin-bottom: 20px;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .result-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .emoji-big {
+            font-size: 3em;
+            text-align: center;
+            margin: 10px 0;
+            animation: bounce 1s infinite;
+        }
+
+        .special-date {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .special-date-title {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .special-date-value {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        .fun-message {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 1.1em;
+            color: #ff6b6b;
+            border: 2px dashed #feca57;
+        }
+
+        .record-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f9ff;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .record-button {
+            background: linear-gradient(45deg, #48dbfb, #0abde3);
+            padding: 12px 20px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            margin: 10px 5px;
+            display: inline-block;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .record-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(72, 219, 251, 0.4);
+        }
+
+        .records-list {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .record-item {
+            padding: 10px;
+            margin: 8px 0;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .record-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .age-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+
+        .countdown-special {
+            background: linear-gradient(45deg, #ee5a24, #f79f1f);
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(238, 90, 36, 0.3);
+        }
+
+        .countdown-special h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .countdown-special .days {
+            font-size: 3em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .select-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .save-notification {
+            background: linear-gradient(45deg, #00b894, #00cec9);
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: 600;
+            animation: fadeInOut 2s;
+            display: none;
+        }
+
+        .save-notification.show {
+            display: block;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(-10px); }
+            20% { opacity: 1; transform: translateY(0); }
+            80% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-10px); }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .special-date-value {
+                font-size: 2em;
+            }
+
+            .name-selection {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .date-selectors {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎊 쎌 친구들 환갑<br>카운트다운 🎊</h1>
+        <p class="subtitle">우리 언제 환갑이지? 😄</p>
+        
+        <div class="input-group">
+            <label>친구를 선택하세요! 👋</label>
+            <div class="name-selection" id="nameSelection">
+                <div class="name-btn" onclick="selectName(this, '주민준')">주민준</div>
+                <div class="name-btn" onclick="selectName(this, '박상규')">박상규</div>
+                <div class="name-btn" onclick="selectName(this, '김정인')">김정인</div>
+                <div class="name-btn" onclick="selectName(this, '장윤희')">장윤희</div>
+                <div class="name-btn" onclick="selectName(this, '황원철')">황원철</div>
+                <div class="name-btn" onclick="selectName(this, '고유연')">고유연</div>
+                <div class="name-btn" onclick="selectName(this, '김완석')">김완석</div>
+                <div class="name-btn other" onclick="selectOther(this)">다른 사람<br>확인하기</div>
+            </div>
+            <input type="text" class="other-name-input" id="otherNameInput" placeholder="이름을 입력하세요" maxlength="20">
+        </div>
+        
+        <div class="input-group">
+            <label>생년월일을 선택하세요! 🎂</label>
+            <div class="date-selectors">
+                <div>
+                    <div class="select-label">년도</div>
+                    <select id="birthYear">
+                        <option value="">년도 선택</option>
+                    </select>
+                </div>
+                <div>
+                    <div class="select-label">월</div>
+                    <select id="birthMonth">
+                        <option value="">월 선택</option>
+                    </select>
+                </div>
+                <div>
+                    <div class="select-label">일</div>
+                    <select id="birthDay">
+                        <option value="">일 선택</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <button id="calculateBtn" onclick="calculateHwangap()" disabled>🚀 환갑까지 얼마나 남았나<br>확인하기!</button>
+        
+        <div class="result" id="result">
+            <div class="welcome-message" id="welcomeMessage"></div>
+            
+            <div class="emoji-big" id="emojiDisplay">🎯</div>
+            
+            <div class="result-card">
+                <h3>📊 기본 정보</h3>
+                <p><strong>현재 나이:</strong> <span id="currentAge"></span></p>
+                <p><strong>환갑 날짜:</strong> <span id="hwangapDate"></span></p>
+            </div>
+            
+            <div class="special-date">
+                <div class="special-date-title">🎉 환갑까지 D-DAY</div>
+                <div class="special-date-value" id="daysToHwangap"></div>
+            </div>
+            
+            <div class="countdown-special" id="thousandDaysSection">
+                <h3>⚡ 환갑 1000일 전 특별 카운트다운!</h3>
+                <div class="days" id="thousandDaysCountdown"></div>
+                <p id="thousandDaysMessage"></p>
+            </div>
+            
+            <div class="fun-message" id="funMessage"></div>
+            
+            <div class="save-notification" id="saveNotification">
+                ✅ 자동으로 저장되었습니다!
+            </div>
+            
+            <div class="record-section">
+                <h3>📝 쎌 친구들 전체 기록</h3>
+                <span class="record-button" onclick="toggleRecords()">👥 친구들 환갑 순위 보기</span>
+                <div class="records-list" id="recordsList" style="display:none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedName = '';
+        let isOtherPerson = false;
+        
+        // 초기 년도 설정 (쎌 친구들용: 1960-1980)
+        function setupYearOptions(isForOther = false) {
+            const yearSelect = document.getElementById('birthYear');
+            yearSelect.innerHTML = '<option value="">년도 선택</option>';
+            
+            if (isForOther) {
+                // 다른 사람용: 1900년부터 현재까지
+                const currentYear = new Date().getFullYear();
+                for (let year = currentYear; year >= 1900; year--) {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.textContent = `${year}년`;
+                    yearSelect.appendChild(option);
+                }
+                // 기본값 1968년으로 설정
+                yearSelect.value = '1968';
+            } else {
+                // 쎌 친구들용: 1960-1980
+                for (let year = 1960; year <= 1980; year++) {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.textContent = `${year}년`;
+                    yearSelect.appendChild(option);
+                }
+            }
+        }
+        
+        // 초기 년도 옵션 생성 (쎌 친구들용)
+        setupYearOptions(false);
+        
+        // 월 옵션 생성
+        const monthSelect = document.getElementById('birthMonth');
+        for (let month = 1; month <= 12; month++) {
+            const option = document.createElement('option');
+            option.value = month;
+            option.textContent = `${month}월`;
+            monthSelect.appendChild(option);
+        }
+        
+        // 일 옵션 생성 (기본 31일)
+        function updateDays() {
+            const daySelect = document.getElementById('birthDay');
+            const selectedYear = document.getElementById('birthYear').value;
+            const selectedMonth = document.getElementById('birthMonth').value;
+            const selectedDay = daySelect.value;
+            
+            daySelect.innerHTML = '<option value="">일 선택</option>';
+            
+            if (selectedYear && selectedMonth) {
+                const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const option = document.createElement('option');
+                    option.value = day;
+                    option.textContent = `${day}일`;
+                    daySelect.appendChild(option);
+                }
+                
+                // 이전에 선택한 일이 있고 유효하면 다시 선택
+                if (selectedDay && selectedDay <= daysInMonth) {
+                    daySelect.value = selectedDay;
+                }
+            } else {
+                for (let day = 1; day <= 31; day++) {
+                    const option = document.createElement('option');
+                    option.value = day;
+                    option.textContent = `${day}일`;
+                    daySelect.appendChild(option);
+                }
+            }
+            
+            checkFormComplete();
+        }
+        
+        // 월 또는 년도가 변경될 때 일 업데이트
+        document.getElementById('birthYear').addEventListener('change', updateDays);
+        document.getElementById('birthMonth').addEventListener('change', updateDays);
+        document.getElementById('birthDay').addEventListener('change', checkFormComplete);
+        
+        // 다른 사람 이름 입력 이벤트
+        document.getElementById('otherNameInput').addEventListener('input', function() {
+            selectedName = this.value.trim();
+            checkFormComplete();
+        });
+        
+        // 초기 일 옵션 생성
+        updateDays();
+        
+        // localStorage에서 기록 불러오기
+        let records = JSON.parse(localStorage.getItem('cellFriendsRecords')) || [];
+        
+        function selectName(element, name) {
+            // 다른 사람 입력 숨기기
+            document.getElementById('otherNameInput').classList.remove('show');
+            document.getElementById('otherNameInput').value = '';
+            
+            // 모든 이름 버튼의 선택 해제
+            document.querySelectorAll('.name-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // 선택한 버튼 활성화
+            element.classList.add('selected');
+            selectedName = name;
+            isOtherPerson = false;
+            
+            // 쎌 친구들용 년도 범위 설정
+            setupYearOptions(false);
+            updateDays();
+            
+            checkFormComplete();
+        }
+        
+        function selectOther(element) {
+            // 모든 이름 버튼의 선택 해제
+            document.querySelectorAll('.name-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // 다른 사람 버튼 활성화
+            element.classList.add('selected');
+            
+            // 다른 사람 입력창 표시
+            const otherInput = document.getElementById('otherNameInput');
+            otherInput.classList.add('show');
+            otherInput.focus();
+            
+            selectedName = otherInput.value.trim();
+            isOtherPerson = true;
+            
+            // 다른 사람용 년도 범위 설정 (제한 해제)
+            setupYearOptions(true);
+            updateDays();
+            
+            checkFormComplete();
+        }
+        
+        function checkFormComplete() {
+            const year = document.getElementById('birthYear').value;
+            const month = document.getElementById('birthMonth').value;
+            const day = document.getElementById('birthDay').value;
+            const calculateBtn = document.getElementById('calculateBtn');
+            
+            if (selectedName && year && month && day) {
+                calculateBtn.disabled = false;
+            } else {
+                calculateBtn.disabled = true;
+            }
+        }
+        
+        function calculateHwangap() {
+            const year = document.getElementById('birthYear').value;
+            const month = document.getElementById('birthMonth').value;
+            const day = document.getElementById('birthDay').value;
+            
+            if (!selectedName || !year || !month || !day) {
+                alert('이름과 생년월일을 모두 선택해주세요! 😊');
+                return;
+            }
+            
+            const birthday = new Date(year, month - 1, day);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            if (birthday > today) {
+                alert('미래에서 오셨나요? 😄 올바른 생일을 선택해주세요!');
+                return;
+            }
+            
+            // 현재 나이 계산
+            let age = today.getFullYear() - birthday.getFullYear();
+            const monthDiff = today.getMonth() - birthday.getMonth();
+            const dayDiff = today.getDate() - birthday.getDate();
+            
+            if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+                age--;
+            }
+            
+            // 환갑 날짜 계산
+            const hwangapDate = new Date(birthday);
+            hwangapDate.setFullYear(birthday.getFullYear() + 60);
+            
+            // 환갑까지 남은 일수
+            const daysToHwangap = Math.ceil((hwangapDate - today) / (1000 * 60 * 60 * 24));
+            
+            // 환갑 1000일 전 날짜 계산
+            const thousand1DaysBefore = new Date(hwangapDate);
+            thousand1DaysBefore.setDate(thousand1DaysBefore.getDate() - 1000);
+            const daysToThousand = Math.ceil((thousand1DaysBefore - today) / (1000 * 60 * 60 * 24));
+            
+            // 결과 표시
+            document.getElementById('welcomeMessage').textContent = `${selectedName}님! 환갑 체크 완료! 🎊`;
+            document.getElementById('currentAge').textContent = `만 ${age}세`;
+            
+            // 나이별 이모지와 메시지
+            let emoji, funMessage;
+            if (age < 20) {
+                emoji = '👶';
+                funMessage = `${selectedName}님은 아직 새싹이시네요! 환갑까지 긴 여정이 남았어요! 🌱`;
+            } else if (age < 30) {
+                emoji = '🌟';
+                funMessage = `${selectedName}님은 청춘이시네요! 환갑이 뭔지도 모르는 나이! 💪`;
+            } else if (age < 40) {
+                emoji = '🔥';
+                funMessage = `${selectedName}님은 30대! 인생의 황금기! 환갑은 아직 멀었어요! ⚡`;
+            } else if (age < 50) {
+                emoji = '💎';
+                funMessage = `${selectedName}님은 40대! 이제 환갑이 조금씩 보이기 시작하네요! 😊`;
+            } else if (age < 55) {
+                emoji = '🏆';
+                funMessage = `${selectedName}님은 50대 초반! 환갑 준비 운동 시작하실 시간! 🎯`;
+            } else if (age < 60) {
+                emoji = '👑';
+                funMessage = `${selectedName}님! 곧 환갑이시네요! 카운트다운 시작! 🎉🎉🎉`;
+            } else {
+                emoji = '🎖️';
+                funMessage = `${selectedName}님은 환갑을 넘으셨네요! 인생의 마스터! 존경합니다! 🙌`;
+            }
+            
+            document.getElementById('emojiDisplay').textContent = emoji;
+            document.getElementById('funMessage').textContent = funMessage;
+            
+            document.getElementById('hwangapDate').textContent = hwangapDate.toLocaleDateString('ko-KR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                weekday: 'long'
+            });
+            
+            if (age >= 60) {
+                document.getElementById('daysToHwangap').textContent = '축하합니다! 🎉';
+                document.getElementById('thousandDaysSection').style.display = 'none';
+            } else {
+                document.getElementById('daysToHwangap').textContent = `${daysToHwangap.toLocaleString()}일`;
+                
+                // 환갑 1000일 전 관련
+                const thousandSection = document.getElementById('thousandDaysSection');
+                thousandSection.style.display = 'block';
+                
+                if (daysToThousand > 0) {
+                    document.getElementById('thousandDaysCountdown').textContent = `D-${daysToThousand.toLocaleString()}`;
+                    document.getElementById('thousandDaysMessage').textContent = 
+                        `${thousand1DaysBefore.toLocaleDateString('ko-KR')}이 환갑 1000일 전이에요!`;
+                } else if (daysToThousand === 0) {
+                    document.getElementById('thousandDaysCountdown').textContent = '🎊 D-DAY 🎊';
+                    document.getElementById('thousandDaysMessage').textContent = '오늘이 바로 환갑 1000일 전입니다!';
+                } else {
+                    document.getElementById('thousandDaysCountdown').textContent = `D+${Math.abs(daysToThousand).toLocaleString()}`;
+                    document.getElementById('thousandDaysMessage').textContent = '환갑 1000일 전을 지났어요! 환갑이 더 가까워졌네요!';
+                }
+            }
+            
+            document.getElementById('result').classList.add('show');
+            
+            // 자동 저장 처리
+            const birthdayString = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const userData = {
+                name: selectedName,
+                birthday: birthdayString,
+                age: age,
+                daysToHwangap: daysToHwangap,
+                isOther: isOtherPerson // 다른 사람 여부 저장
+            };
+            
+            // 중복 체크 및 자동 업데이트
+            const existingIndex = records.findIndex(r => r.name === userData.name);
+            if (existingIndex !== -1) {
+                // 기존 데이터 업데이트
+                records[existingIndex] = userData;
+            } else {
+                // 새로운 데이터 추가
+                records.push(userData);
+            }
+            
+            // localStorage에 자동 저장
+            localStorage.setItem('cellFriendsRecords', JSON.stringify(records));
+            
+            // 저장 알림 표시
+            const saveNotification = document.getElementById('saveNotification');
+            saveNotification.classList.add('show');
+            setTimeout(() => {
+                saveNotification.classList.remove('show');
+            }, 2000);
+            
+            // 순위 리스트 자동 업데이트
+            updateRecordsList();
+        }
+        
+        function updateRecordsList() {
+            const recordsList = document.getElementById('recordsList');
+            
+            if (records.length === 0) {
+                recordsList.innerHTML = '<p>아직 저장된 기록이 없습니다.</p>';
+            } else {
+                // 환갑까지 남은 일수 순으로 정렬 (적은 순)
+                const sortedRecords = [...records].sort((a, b) => a.daysToHwangap - b.daysToHwangap);
+                
+                let html = '<h4>🏆 환갑 순위 (가까운 순)</h4>';
+                sortedRecords.forEach((record, index) => {
+                    let medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
+                    let bgColor = index === 0 ? 'background: linear-gradient(135deg, #ffd700, #ffed4e);' : 
+                                 index === 1 ? 'background: linear-gradient(135deg, #c0c0c0, #e8e8e8);' : 
+                                 index === 2 ? 'background: linear-gradient(135deg, #cd7f32, #e4a853);' : '';
+                    
+                    // 다른 사람은 이름 옆에 표시
+                    const nameDisplay = record.isOther ? `${record.name} 🌟` : record.name;
+                    
+                    html += `
+                        <div class="record-item" style="${bgColor}">
+                            <span>${medal} ${nameDisplay}</span>
+                            <span>
+                                만 ${record.age}세
+                                <span class="age-status">D-${record.daysToHwangap}</span>
+                            </span>
+                        </div>
+                    `;
+                });
+                recordsList.innerHTML = html;
+            }
+        }
+        
+        function toggleRecords() {
+            const recordsList = document.getElementById('recordsList');
+            recordsList.style.display = recordsList.style.display === 'none' ? 'block' : 'none';
+            
+            if (recordsList.style.display === 'block') {
+                updateRecordsList();
+            }
+        }
+        
+        // 페이지 로드 시 기록 업데이트
+        window.addEventListener('load', () => {
+            updateRecordsList();
+        });
+    </script>
+</body>
+</html>
